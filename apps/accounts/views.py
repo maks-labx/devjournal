@@ -1,0 +1,73 @@
+from django.views.generic import DetailView, UpdateView, CreateView
+from django.db import transaction
+from django.urls import reverse_lazy
+from .models import Profile
+from .forms import UserUpdateForm, ProfileUpdateForm, UserRegisterForm, UserLoginForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.views import LoginView, LogoutView 
+
+class ProfileDetailView(DetailView):
+    model = Profile
+    context_object_name = 'profile'
+    template_name = 'accounts/profile_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'User profile: {self.object.user.username}'
+        return context
+    
+class ProfileUpdateView(UpdateView):
+    model = Profile
+    form_class = ProfileUpdateForm
+    template_name = 'accounts/profile_edit.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user.profile
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Edit profile: {self.request.user.username}'
+        if self.request.POST:
+            context['user_form'] = UserUpdateForm(self.request.POST, instance=self.request.user)
+        else:
+            context['user_form'] = UserUpdateForm(instance=self.request.user)
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        user_form = context['user_form']
+        with transaction.atomic():
+            if all([form.is_valid(), user_form.is_valid()]):
+                user_form.save()
+                form.save()
+            else:
+                return self.render_to_response(context)
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        return reverse_lazy('profile_detail', kwargs={'slug': self.object.slug})
+    
+class UserRegisterView(SuccessMessageMixin, CreateView):
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('home')
+    template_name = 'accounts/user_register.html'
+    success_message = 'Registration successful. You can now log in!'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Sign Up'
+        return context
+
+class UserLoginView(SuccessMessageMixin, LoginView):
+    form_class = UserLoginForm
+    template_name = 'accounts/user_login.html'
+    next_page = 'home'
+    success_message = 'Welcome to the site!'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Sign in'
+        return context
+    
+class UserLogoutView(LogoutView):
+    next_page = 'home'

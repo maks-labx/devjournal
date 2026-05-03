@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="card border-0">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <figure>
+                    <img src="{{ profile.avatar.url }}" class="img-fluid rounded-0" alt="{{ profile }}">
+                </figure>
+            </div>
+            <div class="col-md-9">
+                <h5 class="card-title">
+                    {{ profile }}
+                </h5>
+                <div class="card-text">
+                    <ul>
+                        <li>Username: {{ profile.user.username }}</li>
+                        {% if profile.user.get_full_name %}
+                        <li>Full name: {{ profile.user.get_full_name }}</li>
+                        {% endif %}
+                        <li>Last login: {{ profile.user.last_login }} | {% if profile.is_online %}Online{% else %}Offline{% endif %}</li>
+                        <li>Date of birth: {{ profile.birth_date }}</li>
+                        <li>About me: {{ profile.bio }}</li>
+                    </ul>
+                    {% if request.user == profile.user %}
+                    <a href="{% url 'profile_edit' %}" class="btn btn-sm btn-primary">
+                        Edit profile
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
