@@ -6,7 +6,7 @@ from apps.services.utils import unique_slugify
 from django.core.cache import cache
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     slug = models.SlugField(verbose_name='URL', max_length=255, blank=True, unique=True)
     avatar = models.ImageField(verbose_name='Avatar', upload_to='images/avatars/%Y/%m/%d/', default='images/avatars/default.png', blank=True, validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'jpeg'))])
     bio = models.TextField(max_length=500, blank=True, verbose_name='About yourself')
