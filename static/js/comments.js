@@ -34,6 +34,11 @@ async function createComment(event) {
             },
             body: new FormData(commentForm),
         });
+
+        if (!response.ok) {
+            throw new Error("Failed to create comment.");
+        }
+
         const comment = await response.json();
 
         let commentTemplate = `<ul id="comment-thread-${comment.id}">
@@ -71,6 +76,10 @@ async function createComment(event) {
         replyUser();
     }
     catch (error) {
-        console.log(error)
+        console.log(error);
+    }
+    finally {
+        commentFormSubmit.disabled = false;
+        commentFormSubmit.innerText = "Add comment";
     }
 }

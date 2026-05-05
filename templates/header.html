@@ -1,29 +1,40 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="/">My Django Blog 2.0</a>
-        </div>
-</nav>
-<div class='d-flex justify-content-end '>
-            {% if request.user.is_authenticated %}
-        <div class="dropdown text-end">
-          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ request.user }}
-          </a>
-          <ul class="dropdown-menu text-small">
-            <li><a class="dropdown-item" href="{% url 'post_create' %}">Add post</a></li>
-            <li><a class="dropdown-item" href="{% url 'profile_detail' request.user.profile.slug %}">My profile</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                    <form action="{% url 'logout' %}" method="post">{% csrf_token %}
-                        <a href="#" class="dropdown-item" onclick="parentNode.submit();">Log Out</a>
-                    </form>
-            </li>
-          </ul>
-        </div>
+    <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="{% url 'home' %}">My Django Blog 2.0</a>
+
+        {% if request.user.is_authenticated %}
+            <div class="dropdown text-end">
+                <a href="#" class="d-block text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ request.user }}
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end text-small">
+                    <li>
+                        <a class="dropdown-item" href="{% url 'post_create' %}">Add post</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'profile_detail' request.user.profile.slug %}">My profile</a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item">Log Out</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         {% else %}
-            <ul class="nav ">
-              <li><a href="{% url 'register' %}" class="nav-link px-2 link-secondary">Sign up</a></li>
-              <li><a href="{% url 'login' %}" class="nav-link px-2 link-dark">Sign in</a></li>
+            <ul class="nav">
+                <li>
+                    <a href="{% url 'register' %}" class="nav-link px-2 text-white">Sign up</a>
+                </li>
+                <li>
+                    <a href="{% url 'login' %}" class="nav-link px-2 text-white">Sign in</a>
+                </li>
             </ul>
         {% endif %}
-</div>
+    </div>
+</nav>

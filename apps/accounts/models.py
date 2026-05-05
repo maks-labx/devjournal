@@ -28,8 +28,9 @@ class Profile(models.Model):
     def get_absolute_url(self):
         return reverse('profile_detail', kwargs={'slug': self.slug})
     
-    def is_online(self):
-        cache_key = f'last-seen-{self.user.id}'
-        last_seen = cache.get(cache_key)
+@property
+def is_online(self):
+    cache_key = f'last-seen-{self.user.id}'
+    last_seen = cache.get(cache_key)
 
-        return True if last_seen else False
+    return bool(last_seen)

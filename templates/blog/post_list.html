@@ -26,10 +26,13 @@
                     </div>
                 </div>
                 <div class="rating-buttons">
-                    <button class="btn btn-sm btn-primary" data-post="{{ post.id }}" data-value="1">Like</button>
-                    <button class="btn btn-sm btn-secondary" data-post="{{ post.id }}" data-value="-1">Dislike
-                    </button>
-                    <button class="btn btn-sm btn-secondary rating-sum">{{ post.get_sum_rating }}</button>
+                    {% if request.user.is_authenticated %}
+                        <button class="btn btn-sm btn-primary" data-post="{{ post.id }}" data-value="1">Like</button>
+                        <button class="btn btn-sm btn-secondary" data-post="{{ post.id }}" data-value="-1">Dislike</button>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-secondary">Sign in to rate</a>
+                    {% endif %}
+                    <button class="btn btn-sm btn-secondary rating-sum" type="button">{{ post.get_sum_rating }}</button>
                 </div>
             </div>
         </div>
@@ -37,5 +40,5 @@
 {% endblock %}
 
 {% block script %}
-    <script src="{% static 'ratings.js' %}"></script>
+    <script src="{% static 'js/ratings.js' %}"></script>
 {% endblock %}

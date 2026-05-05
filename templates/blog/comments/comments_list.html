@@ -36,6 +36,7 @@
              Comment Form
           </h6>
           <form method="post" id="commentForm" name="commentForm" data-post-id="{{ post.pk }}">
+             {% csrf_token %}
              {{ form }}
              <div class="d-grid gap-2 d-md-block mt-2">
                 <button type="submit" class="btn btn-dark" id="commentSubmit">Add Comment</button>
@@ -44,5 +45,3 @@
        </div>
     </div>
 {% endif %}
-
-<script src="{% static 'js/comments.js' %}"></script>
