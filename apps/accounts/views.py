@@ -5,6 +5,7 @@ from .models import Profile
 from .forms import UserUpdateForm, ProfileUpdateForm, UserRegisterForm, UserLoginForm
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import LoginView, LogoutView 
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ProfileDetailView(DetailView):
     model = Profile
@@ -16,7 +17,7 @@ class ProfileDetailView(DetailView):
         context['title'] = f'User profile: {self.object.user.username}'
         return context
     
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileUpdateForm
     template_name = 'accounts/profile_edit.html'

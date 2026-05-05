@@ -15,7 +15,7 @@ class UserUpdateForm(forms.ModelForm):
         fields = ('username', 'email', 'first_name', 'last_name')
 
     def clean_email(self):
-        email=self.cleaned_data.get('email')
+        email = self.cleaned_data.get('email')
         if email and User.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
             raise forms.ValidationError('The email address must be unique.')
         return email

@@ -27,10 +27,15 @@ class PostUpdateForm(PostCreateForm):
         fields = PostCreateForm.Meta.fields + ('pinned',)
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
-        self.fields['pinned'].widget.attrs.update({
-            'class': 'form-check-input'
-        })
+
+        if not user or not user.is_staff:
+            self.fields.pop("pinned", None)
+        else:
+            self.fields["pinned"].widget.attrs.update({
+                "class": "form-check-input",
+            })
 
 class CommentCreateForm(forms.ModelForm):
     parent = forms.IntegerField(widget=forms.HiddenInput, required=False)

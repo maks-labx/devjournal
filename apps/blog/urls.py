@@ -9,5 +9,5 @@ urlpatterns = [
     path('post/<int:pk>/comments/create/', CommentCreateView.as_view(), name='comment_create_view'),
     path('post/tags/<slug:tag>/', PostByTagListView.as_view(), name='post_by_tags'),
     path('category/<slug:slug>/', PostFromCategory.as_view(), name="post_by_category"),
-    path('rating/', RatingCreateView.as_view(), name='raiting'),
+    path('rating/', RatingCreateView.as_view(), name='rating'),
 ]
