@@ -5,7 +5,7 @@ from django_ckeditor_5.widgets import CKEditor5Widget
 class PostCreateForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'category', 'description', 'text', 'thumbnail', 'status')
+        fields = ('title', 'category', 'tags', 'description', 'text', 'thumbnail', 'status')
 
         widgets = {
             'description': CKEditor5Widget(config_name='extends'),
@@ -20,6 +20,10 @@ class PostCreateForm(forms.ModelForm):
                     'class': 'form-control',
                     'autocomplete': 'off'
                       })
+                
+        self.fields["tags"].widget.attrs.update({
+            "placeholder": "python, django, docker"
+        })
 
 class PostUpdateForm(PostCreateForm):
     class Meta:

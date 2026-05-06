@@ -1,9 +1,8 @@
 {% extends "main.html" %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="mb-3">
     <h4 class="mb-0">My posts</h4>
-    <a href="{% url 'post_create' %}" class="btn btn-dark btn-sm">Add post</a>
 </div>
 
 {% if posts %}

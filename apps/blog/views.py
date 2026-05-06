@@ -184,13 +184,17 @@ class PostByTagListView(ListView):
     tag = None
 
     def get_queryset(self):
-        self.tag = Tag.objects.get(slug=self.kwargs['tag'])
+        self.tag = get_object_or_404(Tag, slug=self.kwargs["tag"])
         queryset = Post.custom.filter(tags__slug=self.tag.slug)
         return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = f'Posts by tag: {self.tag.name}'
+
+        page = context['page_obj']
+        context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
+        
         return context
     
 class RatingCreateView(LoginRequiredMixin, View):

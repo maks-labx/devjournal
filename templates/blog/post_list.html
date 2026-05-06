@@ -23,6 +23,16 @@
                         <p class="card-text">{{ post.description|safe }}</p>
                         <small>Add {{ post.author.username }}, {{ post.create }},</small>
                         in category: <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a>
+                        {% if post.tags.all %}
+                            <div class="mt-2">
+                                <span class="me-1">Tags:</span>
+                                {% for tag in post.tags.all %}
+                                    <a href="{% url 'post_by_tags' tag.slug %}" class="badge text-bg-light text-decoration-none">
+                                        #{{ tag.name }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="rating-buttons">
