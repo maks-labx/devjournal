@@ -70,11 +70,35 @@ class PostFromCategory(ListView):
         context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
         return context
     
+class MyPostListView(LoginRequiredMixin, ListView):
+    model = Post
+    template_name = "blog/my_posts.html"
+    context_object_name = "posts"
+    paginate_by = 10
+    login_url = 'login'
+
+    def get_queryset(self):
+        return (
+            Post.objects
+            .select_related("author", "category")
+            .filter(author=self.request.user)
+            .order_by("-create")
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "My posts"
+
+        page = context["page_obj"]
+        context["paginator_range"] = page.paginator.get_elided_page_range(page.number)
+
+        return context
+    
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'blog/post_create.html'
     form_class = PostCreateForm
-    login_url = 'home'
+    login_url = 'login'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +114,7 @@ class PostUpdateView(AuthorRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'blog/post_update.html'
     context_object_name = 'post'
     form_class = PostUpdateForm
-    login_url = 'home'
+    login_url = 'login'
     success_message = 'Post updated successfully!'
 
     def get_context_data(self, **kwargs):
@@ -109,6 +133,7 @@ class PostUpdateView(AuthorRequiredMixin, SuccessMessageMixin, UpdateView):
     
 class CommentCreateView(LoginRequiredMixin, CreateView):
     form_class = CommentCreateForm
+    login_url = 'login'
 
     def is_ajax(self):
         return self.request.headers.get('X-Requested-With') == 'XMLHttpRequest'

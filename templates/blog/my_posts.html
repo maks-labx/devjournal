@@ -1,0 +1,87 @@
+{% extends "main.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">My posts</h4>
+    <a href="{% url 'post_create' %}" class="btn btn-dark btn-sm">Add post</a>
+</div>
+
+{% if posts %}
+    {% for post in posts %}
+        <div class="card mb-3 border-0 shadow-sm">
+            <div class="row g-0">
+                <div class="col-md-3">
+                    {% if post.thumbnail %}
+                        <img src="{{ post.thumbnail.url }}"
+                            class="img-fluid rounded-start h-100"
+                            style="object-fit: cover; min-height: 180px;"
+                            alt="{{ post.title }}">
+                    {% else %}
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted"
+                            style="min-height: 180px;">
+                            No image
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <h5 class="card-title mb-1">
+                                    <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+                                        {{ post.title }}
+                                    </a>
+                                </h5>
+
+                                <div class="text-muted small mb-2">
+                                    Category:
+                                    <a href="{{ post.category.get_absolute_url }}">
+                                        {{ post.category.title }}
+                                    </a>
+                                    |
+                                    Created: {{ post.create }}
+                                    |
+                                    Updated: {{ post.update }}
+                                </div>
+
+                                <p class="card-text">
+                                    {{ post.description|safe|truncatechars:180 }}
+                                </p>
+                            </div>
+
+                            <div class="text-end">
+                                {% if post.status == "published" %}
+                                    <span class="badge text-bg-success mb-2">Published</span>
+                                {% else %}
+                                    <span class="badge text-bg-secondary mb-2">Draft</span>
+                                {% endif %}
+
+                                {% if post.pinned %}
+                                    <div>
+                                        <span class="badge text-bg-warning">Pinned</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <a href="{{ post.get_absolute_url }}" class="btn btn-outline-secondary btn-sm">
+                                View
+                            </a>
+                            <a href="{% url 'post_update' post.slug %}" class="btn btn-outline-primary btn-sm">
+                                Edit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-info">
+        You have not created any posts yet.
+        <a href="{% url 'post_create' %}" class="alert-link">Create your first post</a>.
+    </div>
+{% endif %}
+{% endblock %}
