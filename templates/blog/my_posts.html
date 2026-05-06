@@ -7,13 +7,13 @@
 
 {% if posts %}
     {% for post in posts %}
-        <div class="card mb-3 border-0 shadow-sm">
+        <div class="card post-card mb-3 border-0 shadow-sm">
             <div class="row g-0">
                 <div class="col-md-3">
                     {% if post.thumbnail %}
                         <img src="{{ post.thumbnail.url }}"
-                            class="img-fluid rounded-start h-100"
-                            style="object-fit: cover; min-height: 180px;"
+                            class="post-thumbnail rounded-start h-100"
+                            style="min-height: 180px;"
                             alt="{{ post.title }}">
                     {% else %}
                         <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted"
@@ -33,7 +33,7 @@
                                     </a>
                                 </h5>
 
-                                <div class="text-muted small mb-2">
+                                <div class="post-meta mb-2">
                                     Category:
                                     <a href="{{ post.category.get_absolute_url }}">
                                         {{ post.category.title }}

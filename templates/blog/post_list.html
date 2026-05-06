@@ -4,14 +4,14 @@
     {% load static %}
     
     {% for post in posts %}
-        <div class="card mb-3">
+        <div class="card post-card mb-3 border-0 shadow-sm">
             <div class="row">
                 <div class="col-4">
                     {% if post.thumbnail %}
-                        <img src="{{ post.thumbnail.url }}" class="card-img-top" alt="{{ post.title }}">
+                        <img src="{{ post.thumbnail.url }}" class="post-thumbnail" alt="{{ post.title }}">
                     {% else %}
-                        <div class="d-flex align-items-center justify-content-center h-100">
-                            <p>Not image</p>
+                        <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted" style="min-height: 220px;">
+                            No image
                         </div>
                     {% endif %}
                 </div>
@@ -21,13 +21,16 @@
                             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
                         </h5>
                         <p class="card-text">{{ post.description|safe }}</p>
-                        <small>Add {{ post.author.username }}, {{ post.create }},</small>
-                        in category: <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a>
+                        <div class="post-meta">
+                            Added by {{ post.author.username }} · {{ post.create }} ·
+                            Category:
+                            <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a>
+                        </div>
                         {% if post.tags.all %}
                             <div class="mt-2">
                                 <span class="me-1">Tags:</span>
                                 {% for tag in post.tags.all %}
-                                    <a href="{% url 'post_by_tags' tag.slug %}" class="badge text-bg-light text-decoration-none">
+                                    <a href="{% url 'post_by_tags' tag.slug %}" class="badge tag-badge text-decoration-none">
                                         #{{ tag.name }}
                                     </a>
                                 {% endfor %}
