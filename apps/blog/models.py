@@ -23,7 +23,7 @@ class Post(models.Model):
     description = CKEditor5Field(config_name='extends', verbose_name='Brief description', max_length=500)
     text = CKEditor5Field(config_name='extends', verbose_name='Post content')
     category = TreeForeignKey(to='Category', on_delete=models.PROTECT, related_name='posts', verbose_name='Category')
-    thumbnail = models.ImageField(default='default.jpg', verbose_name='Thumbnail image', blank=True, upload_to='images/thumbnails/%Y/%m/%d/', 
+    thumbnail = models.ImageField(default='images/thumbnails/default_post.jpg', verbose_name='Thumbnail image', blank=True, upload_to='images/thumbnails/%Y/%m/%d/', 
                                   validators=[FileExtensionValidator(allowed_extensions=('png', 'jpg', 'webp', 'jpeg', 'gif'))])
     status = models.CharField(choices=STATUS_OPTIONS, default='published', verbose_name='Post status', max_length=10)
     create = models.DateTimeField(auto_now_add=True, verbose_name='Created at')

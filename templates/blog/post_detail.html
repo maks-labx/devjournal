@@ -22,6 +22,17 @@
                 <a href="{% url 'post_by_category' post.category.slug %}">
                     {{ post.category.title }}
                 </a> / Add: {{ post.author.username }} / <small>{{ post.create }}</small>
+                {% if request.user == post.author or request.user.is_staff %}
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{% url 'post_update' post.slug %}" class="btn btn-outline-primary btn-sm">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'post_delete' post.slug %}" class="btn btn-outline-danger btn-sm">
+                            Delete
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

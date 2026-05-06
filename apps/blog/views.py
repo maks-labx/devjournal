@@ -1,4 +1,4 @@
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from .models import Post, Category, Rating
 from .forms import PostCreateForm, PostUpdateForm, CommentCreateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,6 +10,7 @@ from django.utils.formats import date_format
 from django.utils.timezone import localtime
 from taggit.models import Tag
 from django.db.models import Q
+from django.urls import reverse_lazy
 
 class PostListView(ListView):
     template_name = 'blog/post_list.html'
@@ -131,6 +132,19 @@ class PostUpdateView(AuthorRequiredMixin, SuccessMessageMixin, UpdateView):
         kwargs["user"] = self.request.user
         return kwargs
     
+class PostDeleteView(AuthorRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Post
+    template_name = "blog/post_confirm_delete.html"
+    context_object_name = "post"
+    success_url = reverse_lazy("my_posts")
+    login_url = "login"
+    success_message = "Post deleted successfully!"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = f"Delete post: {self.object.title}"
+        return context
+    
 class CommentCreateView(LoginRequiredMixin, CreateView):
     form_class = CommentCreateForm
     login_url = 'login'
@@ -194,7 +208,7 @@ class PostByTagListView(ListView):
 
         page = context['page_obj']
         context['paginator_range'] = page.paginator.get_elided_page_range(page.number)
-        
+
         return context
     
 class RatingCreateView(LoginRequiredMixin, View):

@@ -68,8 +68,13 @@
                             <a href="{{ post.get_absolute_url }}" class="btn btn-outline-secondary btn-sm">
                                 View
                             </a>
+
                             <a href="{% url 'post_update' post.slug %}" class="btn btn-outline-primary btn-sm">
                                 Edit
+                            </a>
+
+                            <a href="{% url 'post_delete' post.slug %}" class="btn btn-outline-danger btn-sm">
+                                Delete
                             </a>
                         </div>
                     </div>
