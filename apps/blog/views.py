@@ -15,7 +15,7 @@ from django.urls import reverse_lazy
 class PostListView(ListView):
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 4
     queryset = Post.custom.all()
 
     def get_context_data(self, **kwargs):
@@ -54,7 +54,7 @@ class PostFromCategory(ListView):
     template_name='blog/post_list.html'
     context_object_name = 'posts'
     category = None
-    paginate_by = 1
+    paginate_by = 4
 
     def get_queryset(self):
         self.category = get_object_or_404(Category, slug=self.kwargs["slug"])
@@ -75,7 +75,7 @@ class MyPostListView(LoginRequiredMixin, ListView):
     model = Post
     template_name = "blog/my_posts.html"
     context_object_name = "posts"
-    paginate_by = 10
+    paginate_by = 8
     login_url = 'login'
 
     def get_queryset(self):
@@ -194,7 +194,7 @@ class PostByTagListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
-    paginate_by = 10
+    paginate_by = 4
     tag = None
 
     def get_queryset(self):
