@@ -17,3 +17,5 @@ django-taggit
 django-recaptcha
 
 django-ckeditor-5
+
+gunicorn
